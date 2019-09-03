@@ -40,9 +40,19 @@ public class Reserva {
 		
 	}
 	
-	public void atualizaDias(Date checkIn, Date checkOut) {
+	public String atualizaDias(Date checkIn, Date checkOut) {
+		Date now = new Date();
+
+		if (checkIn.before(now) || checkOut.before(now)) {
+			return("\nErro! As datas para atualizacao devem ser futuras!");
+		}
+		if (checkOut.before(checkIn)) {
+			return("Erro! Data de saida anterior a data de entrada!");
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 	
 	@Override
