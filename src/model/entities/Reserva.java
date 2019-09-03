@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
 public class Reserva {
 
 	private Integer numero;
@@ -12,7 +14,10 @@ public class Reserva {
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
-	public Reserva(Integer numero, Date checkIn, Date checkOut) {
+	public Reserva(Integer numero, Date checkIn, Date checkOut) throws DomainException {
+		if (checkOut.before(checkIn)) {
+			throw new DomainException("Data de saida anterior a data de entrada!");
+		}
 		this.numero = numero;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,19 +45,19 @@ public class Reserva {
 		
 	}
 	
-	public String atualizaDias(Date checkIn, Date checkOut) {
+	public void atualizaDias(Date checkIn, Date checkOut) throws DomainException {
 		Date now = new Date();
 
 		if (checkIn.before(now) || checkOut.before(now)) {
-			return("\nErro! As datas para atualizacao devem ser futuras!");
+			throw new DomainException("As datas para atualizacao devem ser futuras!");
 		}
 		if (checkOut.before(checkIn)) {
-			return("Erro! Data de saida anterior a data de entrada!");
+			throw new DomainException("Data de saida anterior a data de entrada!");
 		}
 		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
+		
 	}
 	
 	@Override
